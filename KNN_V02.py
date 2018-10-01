@@ -137,6 +137,15 @@ class KnnModel() :
 			sum = math.sqrt(sum)
 		return sum
 
+	def distanceMinkowski(self,tempSample,testSample):
+		noOfFeatures = len(tempSample)
+		sum =0
+		for no in range(0,noOfFeatures) :
+			sum = sum + math.pow(tempSample[no]-testSample[no],3)
+			root_cube = lambda x: x**(1./3.) if 0<=x else -(-x)**(1./3.)
+			sum = root_cube(sum)
+		return sum
+
 	def distanceManhattan(self,tempSample,testSample):
 		noOfFeatures = len(tempSample)
 		sum =0
@@ -151,6 +160,8 @@ class KnnModel() :
 			return self.distanceEuclidean(tempSample,testSample)
 		if self.typeOfFunction == "Manhattan" :
 			return self.distanceManhattan(tempSample,testSample)
+		if self.typeOfFunction == "Minkowski" :
+			return self.distanceMinkowski(tempSample,testSample)
 
 
 
@@ -218,6 +229,19 @@ class KnnModel() :
 		else :
 			return 1.0
 
+	def save_TrDS_TeDS(self,t_training_DS,t_test_DS):
+		f = open("trainingDataSet.csv", "w")
+		for sample in t_training_DS :
+			line = ",".join(str(e) for e in sample) + "\n"
+			f.write(line)
+		f.close()
+
+		f = open("testDataSet.csv", "w")
+		for sample in t_test_DS :
+			line = ",".join(str(e) for e in sample) + "\n"
+			f.write(line)
+		f.close()
+
 
 		
 		
@@ -227,6 +251,7 @@ class KnnModel() :
 	def myTest(self):
 		DSN,DSA = self.readNormalAndAnomalyFile()
 		training_DS,test_DS = self.prepareTrainingAndTestDS(DSN,DSA)
+		self.save_TrDS_TeDS(training_DS,test_DS)
 		#print training_DS
 		col = []
 		Tr_features , Tr_lables =  self.dataSetTune(training_DS,col)
@@ -278,9 +303,9 @@ def testAccuracyWithDistanceFunctionChange():
 	f.write("\n \n checking how accuracy change with changing Distance calculation methods \n \n")
 	f.write("Method" + "," + "Accuracy"+ "," + "FP"+ "," + "FN"+ "," + "TP"+"," + "TN \n")
 	print "Method" , "," , "Accuracy"
-	methods = ["Euclidean","Manhattan"]
+	methods = ["Euclidean","Manhattan","Minkowski"]
 	for method in methods :
-		obj = KnnModel(5000,5,method,2)
+		obj = KnnModel(10,5,method,2)
 		obj.myTest()
 		print method , "," , obj.Accuracy
 		f.write( method + "," + str(obj.Accuracy) + "," + str(obj.FP) + "," + str(obj.FN)+ "," + str(obj.TP) + "," + str(obj.TN) + "\n")
@@ -291,8 +316,8 @@ def testAccuracyWithDistanceFunctionChange():
 # Euclidean or Manhattan
 
 
-testAccuracyWithSampleSelectChange()
-testAccuracyWithKeyChange()
+#testAccuracyWithSampleSelectChange()
+#testAccuracyWithKeyChange()
 testAccuracyWithDistanceFunctionChange()
 
 #knnObj = KnnModel(500,7,"Manhattan",2)

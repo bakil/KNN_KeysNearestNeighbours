@@ -1,0 +1,23 @@
+
+ 
+ checking how accuracy change with changing way of selecting samples 
+ 
+sampleSelect,Accuracy,FP,FN,TP,TN 
+
+ 
+ checking how accuracy change with changing way of selecting samples 
+ 
+sampleSelect,Accuracy,FP,FN,TP,TN 
+1,98.96,0,52,2448,2500
+
+ 
+ checking how accuracy change with changing way of selecting samples 
+ 
+sampleSelect,Accuracy,FP,FN,TP,TN 
+1,98.96,0,52,2448,2500
+
+ 
+ checking how accuracy change with changing way of selecting samples 
+ 
+sampleSelect,Accuracy,FP,FN,TP,TN 
+1,98.96,0,52,2448,2500
