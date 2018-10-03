@@ -7,7 +7,7 @@ class KnnModel() :
 	FP = 0
 	TN = 0
 	TP = 0
-	def __init__(self,howManySamples,keys=7,typeOfFunction="Euclidean",howToSelectSamples=1):
+	def __init__(self,howManySamples=10,keys=7,typeOfFunction="Euclidean",howToSelectSamples=1):
 		self.howManySamples = howManySamples
 		self.keys = keys # no of keys
 		self.typeOfFunction = typeOfFunction
@@ -230,13 +230,19 @@ class KnnModel() :
 			return 1.0
 
 	def save_TrDS_TeDS(self,t_training_DS,t_test_DS):
-		f = open("trainingDataSet.csv", "w")
+		current_directory = os.getcwd()
+		final_directory = os.path.join(current_directory, r'out')
+		if not os.path.exists(final_directory):
+		   os.makedirs(final_directory)
+		traininggDataSetFile = os.path.join(final_directory, r'trainingDataSet.csv')
+		f = open(traininggDataSetFile, "w")
 		for sample in t_training_DS :
 			line = ",".join(str(e) for e in sample) + "\n"
 			f.write(line)
 		f.close()
 
-		f = open("testDataSet.csv", "w")
+		testingDataSetFile = os.path.join(final_directory, r'testDataSet.csv')
+		f = open(testingDataSetFile, "w")
 		for sample in t_test_DS :
 			line = ",".join(str(e) for e in sample) + "\n"
 			f.write(line)
@@ -265,14 +271,23 @@ class KnnModel() :
 
 
 def testAccuracyWithKeyChange():
-	f = open("KNNdifferentKeys.txt", "a")
-	print " checking how accuracy change with changing of Keys \n"
+	current_directory = os.getcwd()
+	final_directory = os.path.join(current_directory, r'out')
+	if not os.path.exists(final_directory):
+		  os.makedirs(final_directory)
+	outFile = os.path.join(final_directory, r'KNNdifferentKeys.txt')
+
+	f = open(outFile, "w")
+	f.write("checking how accuracy change with changing way of keys \n \n")
+	f.write("no_of_keys" + "," + "Accuracy"+ "," + "FP"+ "," + "FN"+ "," + "TP"+"," + "TN \n")
+
+	f.close()
+	f = open(outFile, "a")
+	print " checking how accuracy change with changing of Keys \n\n"
 	print "Keys" , "," , "Accuracy", "," , "FP", "," , "FN", "," , "TP","," , "TN"
-	f.write("\n \n checking how accuracy change with changing way of iterations \n \n")
-	f.write("Keys" + "," + "Accuracy"+ "," + "FP"+ "," + "FN"+ "," + "TP"+"," + "TN \n")
 	print "Key" , "," , "Accuracy"
 	for tempKey in range(1,31,2):
-		obj = KnnModel(5000,tempKey,"Manhattan",2)
+		obj = KnnModel(50,tempKey,"Manhattan",2)
 		obj.myTest()
 		print tempKey , "," , obj.Accuracy
 		f.write( str(tempKey) + "," + str(obj.Accuracy) + "," + str(obj.FP) + "," + str(obj.FN)+ "," + str(obj.TP) + "," + str(obj.TN) + "\n")
@@ -280,15 +295,25 @@ def testAccuracyWithKeyChange():
 	f.close()
 
 def testAccuracyWithSampleSelectChange():
-	f = open("KNNdifferentSample.txt", "a")
+	current_directory = os.getcwd()
+	final_directory = os.path.join(current_directory, r'out')
+	if not os.path.exists(final_directory):
+		  os.makedirs(final_directory)
+	outFile = os.path.join(final_directory, r'KNNdifferentSamples.txt')
+
+	f = open(outFile, "w")
+	f.write("checking how accuracy change with changing way of keys \n \n")
+	f.write("sampleSelect" + "," + "Accuracy"+ "," + "FP"+ "," + "FN"+ "," + "TP"+"," + "TN \n")
+
+	f.close()
+	f = open(outFile, "a")
+
 	print " checking how accuracy change with changing way of selecting samples \n"
 	print "sampleSelect" , "," , "Accuracy", "," , "FP", "," , "FN", "," , "TP","," , "TN"
-	f.write("\n \n checking how accuracy change with changing way of selecting samples \n \n")
-	f.write("sampleSelect" + "," + "Accuracy"+ "," + "FP"+ "," + "FN"+ "," + "TP"+"," + "TN \n")
 	print "sampleSelect" , "," , "Accuracy"
 
 	for sampleSelect in range(1,5):
-		obj = KnnModel(5000,5,"Manhattan",sampleSelect)
+		obj = KnnModel(50,5,"Manhattan",sampleSelect)
 		obj.myTest()
 		print sampleSelect , "," , obj.Accuracy
 		f.write( str(sampleSelect) + "," + str(obj.Accuracy) + "," + str(obj.FP) + "," + str(obj.FN)+ "," + str(obj.TP) + "," + str(obj.TN) + "\n")
@@ -297,15 +322,25 @@ def testAccuracyWithSampleSelectChange():
 
 
 def testAccuracyWithDistanceFunctionChange():
-	f = open("KNNdifferentFunction.txt", "a")
+	current_directory = os.getcwd()
+	final_directory = os.path.join(current_directory, r'out')
+	if not os.path.exists(final_directory):
+		  os.makedirs(final_directory)
+	outFile = os.path.join(final_directory, r'KNNdifferentFunction.txt')
+
+	f = open(outFile, "w")
+	f.write("checking how accuracy change with changing Distance calculation methods \n \n")
+	f.write("Method" + "," + "Accuracy"+ "," + "FP"+ "," + "FN"+ "," + "TP"+"," + "TN \n")
+
+	f.close()
+	f = open(outFile, "a")
+
 	print " checking how accuracy change with changing Distance calculation methods \n"
 	print "Method" , "," , "Accuracy", "," , "FP", "," , "FN", "," , "TP","," , "TN"
-	f.write("\n \n checking how accuracy change with changing Distance calculation methods \n \n")
-	f.write("Method" + "," + "Accuracy"+ "," + "FP"+ "," + "FN"+ "," + "TP"+"," + "TN \n")
 	print "Method" , "," , "Accuracy"
 	methods = ["Euclidean","Manhattan","Minkowski"]
 	for method in methods :
-		obj = KnnModel(10,5,method,2)
+		obj = KnnModel(50,5,method,2)
 		obj.myTest()
 		print method , "," , obj.Accuracy
 		f.write( method + "," + str(obj.Accuracy) + "," + str(obj.FP) + "," + str(obj.FN)+ "," + str(obj.TP) + "," + str(obj.TN) + "\n")
@@ -313,17 +348,17 @@ def testAccuracyWithDistanceFunctionChange():
 	f.close()
 
 
-# Euclidean or Manhattan
+def evaluation() :
+	testAccuracyWithSampleSelectChange()
+	testAccuracyWithKeyChange()
+	testAccuracyWithDistanceFunctionChange()
+	current_directory = os.getcwd()
+	final_directory = os.path.join(current_directory, r'out')
+	if os.path.exists(final_directory):
+		os.startfile(final_directory)
 
+evaluation()
 
-#testAccuracyWithSampleSelectChange()
-#testAccuracyWithKeyChange()
-testAccuracyWithDistanceFunctionChange()
-
-#knnObj = KnnModel(500,7,"Manhattan",2)
-#knnObj.myTest()
-#print "Accuracy",knnObj.Accuracy
-#del knnObj
 #knnObj = KnnModel(500,7,"Euclidean",2)
 #knnObj.myTest()
 #print "Accuracy",knnObj.Accuracy

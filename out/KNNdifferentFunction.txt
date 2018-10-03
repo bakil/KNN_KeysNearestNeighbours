@@ -1,0 +1,6 @@
+checking how accuracy change with changing Distance calculation methods 
+ 
+Method,Accuracy,FP,FN,TP,TN 
+Euclidean,96.0,1,1,24,24
+Manhattan,92.0,3,1,24,22
+Minkowski,94.0,0,3,22,25
